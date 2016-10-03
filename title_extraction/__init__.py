@@ -42,5 +42,3 @@ print(data_frame.head(20))
 df = data_frame
 dummy_ranks = pandas.get_dummies(df['pos_tagging'], prefix='POS')
 print(dummy_ranks.head(20))
-
-print(dummy_ranks.dtypes)
