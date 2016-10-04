@@ -9,7 +9,7 @@ with open(str(training_data),'rb') as f:
     training_set =  pickle.load(f)
 
 # get the person name from the data set
-pos = training_set[0]
+pos = training_set[10]
 print(pos)
 print("\n\nParsed data:")
 
@@ -42,3 +42,13 @@ print(data_frame.head(20))
 df = data_frame
 dummy_ranks = pandas.get_dummies(df['pos_tagging'], prefix='POS')
 print(dummy_ranks.head(20))
+
+# from sklearn.datasets import load_iris
+# iris = load_iris()
+# X, y = iris.data[:-1,:], iris.target[:-1]
+# print(type(iris))
+
+# from nltk.parse.stanford import StanfordDependencyParser
+#
+# dep_parser=StanfordDependencyParser(model_path="edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz")
+# print([parse.tree() for parse in dep_parser.raw_parse("The quick brown fox jumps over the lazy dog.")])
