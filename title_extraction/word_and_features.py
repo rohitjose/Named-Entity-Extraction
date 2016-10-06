@@ -30,7 +30,7 @@ def build_training_features(training_data):
             # Check for a word in uppercase
             token_dict["isUpper"] = (1 if (word[0].isupper()) else 0)
             # Check for word capitalization
-            token_dict["isCapitalized"] = (1 if (check_word_capitalization(word[0])) else 1)
+            token_dict["isCapitalized"] = (1 if (check_word_capitalization(word[0])) else 0)
 
             # WORD POS TAGGING RELATED FEATURES
             # Check if the POS tagging is NNP - (noun, proper, singular)
