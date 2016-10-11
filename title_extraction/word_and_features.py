@@ -1,10 +1,17 @@
 import sys
 import pickle
-import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction import DictVectorizer
 from nltk.stem.wordnet import WordNetLemmatizer
+
+def suffix(training_set):
+    for lists in training_set:
+        for sublist in lists:
+            if sublist[0][-3] == 'ent' or sublist[0][-3] == 'tor':
+                return True
+            else:
+                return False
 
 def check_word_capitalization(word):
     """Checks whether a word is a capitalized word"""
@@ -28,7 +35,7 @@ def build_training_features(training_data):
         for word in sentence:
             token_dict = {}
             # Map the word into the dictionary
-            token_dict[lmtzr.lemmatize(word[0])] = 1
+            #token_dict[lmtzr.lemmatize(word[0])] = 1
             # WORD TEXT RELATED FEATURES
             # Check for a word in uppercase
             token_dict["isUpper"] = (1 if (word[0].isupper()) else 0)
@@ -52,6 +59,8 @@ def build_training_features(training_data):
             # Map the POS tag of the preceding token
             preceding_pos_tag = word[1]
 
+            #token_dict["suffix"] = (1 if (suffix(training_set)) else 0)
+
             # Append values to features and labels
             features_and_labels.append((token_dict, word[2]))
     # return the features and labels list
@@ -59,6 +68,7 @@ def build_training_features(training_data):
 
 if __name__=="__main__":
     training_data = sys.argv[1]
+    testing_data = sys.argv[2]
     features_and_labels = build_training_features(training_data)
 
     print(features_and_labels[0])
@@ -77,6 +87,29 @@ if __name__=="__main__":
             print('{}:{}'.format(vectorizer.feature_names_[i], arr[0][i]))
 
     print("Only the words")
-    nb = LogisticRegression()
-    nb.fit(X, y)
-    print(nb.score(X, y))
+    logitModel = LogisticRegression()
+    logitModel.fit(X, y)
+    print(logitModel.score(X, y))
+
+
+
+    # Testing
+    test_data = build_training_features(testing_data)
+    encoder = LabelEncoder()
+    vectorizer = DictVectorizer(dtype=float, sparse=True)
+    X_test, y_test = list(zip(*test_data))
+    X_test = vectorizer.fit_transform(X_test)
+    y_test = encoder.fit_transform(y_test)
+    predicted = logitModel.predict(X_test)
+    #print(predicted)
+    probs = logitModel.predict_proba(X_test)
+
+    for item in predicted:
+        if item!=0:
+            print(item)
+
+    from sklearn import metrics
+    print("Accuracy")
+    print(metrics.accuracy_score(y_test, predicted))
+    print(metrics.roc_auc_score(y_test, probs[:, 1]))
+
