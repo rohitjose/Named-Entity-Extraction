@@ -1,6 +1,6 @@
 # Named Entity Extraction
 
-[TOC]
+
 
 ## Approach
 
